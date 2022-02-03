@@ -1,0 +1,13 @@
+sudo certbot --apachesudo snap install --classic certbot
+sudo snap install --classic certbot
+
+
+win 12
+
+postgres
+
+a1s2d3f4
+
+port 
+
+5432

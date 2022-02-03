@@ -1,0 +1,314 @@
+org: tmaximini
+
+custom:
+  secrets: ${file(secrets.json)}
+  tableName: "test-users-table"
+  tableRecipesName: "test-recipes-table"
+  tableCategoriesName: "test-categories-table"
+  fileBucketName: serverless-recetario-angular-${self:provider.stage}
+
+service: serverless-recetario-angular
+package:
+  patterns:
+    - "!node_modules/aws-sdk/**"
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: us-east-1
+  environment:
+    JWT_SECRET: ${self:custom.secrets.JWT_SECRET}
+    AWS_ID: ${self:custom.secrets.AWS_ID}
+    FILE_UPLOAD_BUCKET_NAME: ${self:custom.fileBucketName}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource: "arn:aws:dynamodb:us-east-1:${self:custom.secrets.AWS_ID}:table/${self:custom.tableName}"
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource: "arn:aws:dynamodb:us-east-1:${self:custom.secrets.AWS_ID}:table/${self:custom.tableRecipesName}"
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource: "arn:aws:dynamodb:us-east-1:${self:custom.secrets.AWS_ID}:table/${self:custom.tableCategoriesName}"
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+        - "s3:GetObject"
+        - "s3:PutObject"
+        - "s3:DeleteObject"
+      Resource: "arn:aws:s3:::${self:custom.fileBucketName}/*"
+functions:
+  verify-token:
+    handler: functions/authorize.handler
+  me:
+    handler: functions/me.handler
+    events:
+      - http:
+          path: me
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  login:
+    handler: functions/login.handler
+    events:
+      - http:
+          path: user/login
+          method: post
+          cors:
+            origin: "*"
+            allowCredentials: false
+  register:
+    handler: functions/register.handler
+    events:
+      - http:
+          path: user/register
+          method: post
+          cors:
+            origin: "*"
+            allowCredentials: false
+  recetas-top:
+    handler: functions/recetas-top.handler
+    events:
+      - http:
+          path: recipes/top
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+  recetas-all:
+    handler: functions/recetas-all.handler
+    events:
+      - http:
+          path: recipes
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+  receta-saves:
+    handler: functions/receta-save.handler
+    events:
+      - http:
+          path: recipes/save
+          method: post
+          cors:
+            origin: "*"
+            allowCredentials: true
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  recetas-user:
+    handler: functions/recetas-user.handler
+    events:
+      - http:
+          path: recipes/user
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  recetas-delete:
+    handler: functions/receta-delete.handler
+    events:
+      - http:
+          path: recipes/delete/{id}
+          method: delete
+          cors:
+            origin: "*"
+            allowCredentials: false
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  recetas-update:
+    handler: functions/receta-update.handler
+    events:
+      - http:
+          path: recipes/update/{id}
+          method: put
+          cors:
+            origin: "*"
+            allowCredentials: false
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  recetas-users:
+    handler: functions/recetas-users.handler
+    events:
+      - http:
+          path: recipes/users
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+  recetas-categories:
+    handler: functions/recetas-categories.handler
+    events:
+      - http:
+          path: recipes/categories
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+  recetas-filters:
+    handler: functions/recetas-filters.handler
+    events:
+      - http:
+          path: recipes/filters
+          method: post
+          cors:
+            origin: "*"
+            allowCredentials: false
+  recetas-show:
+    handler: functions/recetas-show.handler
+    events:
+      - http:
+          path: recipes/show/{id}
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+  recetas-comment-save:
+    handler: functions/recetas-comment-save.handler
+    events:
+      - http:
+          path: recipes/comment/save/{id}
+          method: post
+          cors:
+            origin: "*"
+            allowCredentials: false
+  recetas-comment-response:
+    handler: functions/recetas-comment-response.handler
+    events:
+      - http:
+          path: recipes/comment/response/{id}
+          method: post
+          cors:
+            origin: "*"
+            allowCredentials: false
+          authorizer:
+            name: verify-token
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 0
+  recetas-qualification-save:
+    handler: functions/recetas-qualification-save.handler
+    events:
+      - http:
+          path: recipes/qualification/save/{id}
+          method: post
+          cors:
+            origin: "*"
+            allowCredentials: false
+  categories-all:
+    handler: functions/categories-all.handler
+    events:
+      - http:
+          path: categories
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+  categories-show:
+    handler: functions/categories-show.handler
+    events:
+      - http:
+          path: categories/{id}
+          method: get
+          cors:
+            origin: "*"
+            allowCredentials: false
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    recipesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableRecipesName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    categoriesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableCategoriesName}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    FileBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.fileBucketName}
+        AccessControl: PublicRead
+    FileBucketPolicy:
+      Type: "AWS::S3::BucketPolicy"
+      Properties:
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - "s3:GetObject"
+              Resource: arn:aws:s3:::${self:custom.fileBucketName}/*
+        Bucket:
+          Ref: FileBucket

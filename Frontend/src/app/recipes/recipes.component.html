@@ -1,0 +1,138 @@
+<app-public-header></app-public-header>
+
+<main class="container mt-5">
+    <!-- top calificatión recipes-->
+    <div class="container-fluid ">
+        <div class="row">
+            <button class="btn btn-primary d-lg-none" type="button" data-mdb-toggle="collapse"
+                data-mdb-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                Filtrar
+            </button>
+            <div class="col-lg-3 col-md-12 collapse  d-lg-block" id="collapseFilters">
+                <!-- Section: Sidebar -->
+                <section>
+                    <!-- Section: Filters -->
+                    <section id="filters" data-auto-filter="true">
+                        <h5>Filters</h5>
+
+                        <!-- Section: Search -->
+                        <section class="mb-4" data-filter="condition">
+                            <h6 class="font-weight-bold mb-3">Search</h6>
+
+                            <form (submit)="filterSearch(filters.search)">
+                                <div class="input-group">
+                                    <div id="search-autocomplete" class="form-outline">
+                                        <input [(ngModel)]="filters.search" (keyup)="filterSearch(filters.search)"
+                                            name="search" type="search" id="form1" class="form-control" />
+                                        <label class="form-label" for="form1">Search</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+
+                        </section>
+                        <!-- Section: Search -->
+
+                        <!-- Section: Condition -->
+                        <section class="mb-4" data-filter="condition">
+                            <h6 class="font-weight-bold mb-3">Category</h6>
+
+                            <div class="form-check mb-3" *ngFor="let category of categories">
+                                <input id="cat-{{category.id}}" class="form-check-input" type="checkbox"
+                                    (click)="filterCategory(category.id)">
+                                <label class=" form-check-label text-uppercase small text-muted"
+                                    for="cat-{{category.id}}">
+                                    {{category.name}} - {{category.count}}
+                                </label>
+                            </div>
+
+                        </section>
+
+                        <section class="mb-4" data-filter="condition">
+                            <h6 class="font-weight-bold mb-3">Creators</h6>
+
+                            <div class="form-check mb-3" *ngFor="let user of users">
+                                <input id="user-{{user.id}}" class="form-check-input" type="checkbox"
+                                    (click)="filterUser(user.id)">
+                                <label class=" form-check-label text-uppercase small text-muted" for="user-{{user.id}}">
+                                    {{user.name}} - {{user.count}}
+                                </label>
+                            </div>
+
+                        </section>
+                        <!-- Section: Condition -->
+
+                        <!-- Section: Avg. Customer Review -->
+                        <section class="mb-4">
+                            <h6 class="font-weight-bold mb-3">Avg. Customer Review</h6>
+                            <strong>
+                                <span class="rating d-flex p-0" data-toggle="rating" id="filter-rating" tabindex="0">
+                                    <i class=" fa-star fa-sm text-primary p-1" style="cursor:pointer" title=""
+                                        data-toggle="tooltip" (click)="filterStars(1)"
+                                        [ngClass]="filters.stars>0?'fas':'far'"></i>
+                                    <i class=" fa-star fa-sm text-primary p-1" style="cursor:pointer" title=""
+                                        data-toggle="tooltip" (click)="filterStars(2)"
+                                        [ngClass]="filters.stars>1?'fas':'far'"></i>
+                                    <i class=" fa-star fa-sm text-primary p-1" style="cursor:pointer" title=""
+                                        data-toggle="tooltip" (click)="filterStars(3)"
+                                        [ngClass]="filters.stars>2?'fas':'far'"></i>
+                                    <i class=" fa-star fa-sm text-primary p-1" style="cursor:pointer" title=""
+                                        data-toggle="tooltip" (click)="filterStars(4)"
+                                        [ngClass]="filters.stars>3?'fas':'far'"></i>
+                                    <i class=" fa-star fa-sm text-primary p-1" style="cursor:pointer" title=""
+                                        data-toggle="tooltip" (click)="filterStars(5)"
+                                        [ngClass]="filters.stars>4?'fas':'far'"></i>
+                                </span>
+                            </strong>
+                        </section>
+                        <!-- Section: Avg. Customer Review -->
+
+                    </section>
+                    <!-- Section: Filters -->
+                </section>
+                <!-- Section: Sidebar -->
+            </div>
+            <div class="col-lg-9 col-md-12">
+                <h2 class="display-4 fw-bold">Recipes</h2>
+                <p class="lead">
+                    All yours recipes are the best
+                </p>
+                <div class="row">
+                    <div class="col-md-3" *ngFor="let recipe of recipes">
+                        <div class="card mb-3">
+                            <img src="{{recipe.image.length?recipe.image[0]:''}}" alt="" srcset="">
+                            <div class="card-body">
+                                <h5 class="card-title">{{recipe.title}}</h5>
+                                <p class="card-text">{{recipe.description}}</p>
+                                <p>
+                                    <strong class=" pb-2">
+                                        <span class="text-primary">
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=0 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=2 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=3 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=4 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=5?'fas': 'far'"></i>
+                                        </span>
+                                    </strong>
+                                </p>
+                                <a class="btn btn-primary" [routerLink]="['/detail', recipe.id]"
+                                    routerLinkActive="router-link-active">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</main>
+<!-- Footerc cool mdbootstrap -->
+<!-- Footer -->
+<app-public-footer></app-public-footer>
+<!-- Footer -->

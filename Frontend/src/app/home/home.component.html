@@ -1,0 +1,95 @@
+<!-- view component publicheader -->
+<app-public-header></app-public-header>
+
+<main class="container">
+
+    <div class="col-mb-4 col-sm-12 rounded-3">
+        <div class="container-fluid py-5">
+            <div class="row flex-row-reverse">
+                <div class="col-md-6  col-sm-12">
+                    <img src="../../assets/images/recipe.png" class="img-fluid" alt="" srcset="">
+                </div>
+                <div class="col-md-6  col-sm-12 align-self-center">
+
+                    <h1 class="display-3 fw-bold pb-4">Custom jumbotron</h1>
+                    <p class="lead  pb-3">Using a series of utilities, you can create this jumbotron, just like the
+                        one
+                        in
+                        previous versions of Bootstrap. Check out the examples below for how you can remix and restyle
+                        it to
+                        your liking.</p>
+                    <!-- social media bootstrap -->
+                    <div class="row pb-3">
+                        <div class="col-md-4">
+                            <a href="#" class="btn btn-block rounded-pill">
+                                <i class="fab fa-facebook-f"></i>
+                                Facebook
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="#" class="btn  btn-block rounded-pill">
+                                <i class="fab fa-twitter"></i>
+                                Twitter
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="#" class="btn btn-block rounded-pill">
+                                <i class="fab fa-instagram"></i>
+                                Instagram
+                            </a>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary btn-lg " type="button" href="home#topRecipes">Top 10 Recipes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- top calificatión recipes-->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="display-4 fw-bold" id="topRecipes">Top 10 Recipes</h2>
+                <p class="lead">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quibusdam.
+                </p>
+                <div class="row justify-content-center">
+                    <div class="col-md-3 " *ngFor="let recipe of recipes">
+                        <div class="card mb-3">
+                            <img src="{{recipe.image.length?recipe.image[0]:''}}" alt="" srcset="">
+                            <div class="card-body">
+                                <h5 class="card-title">{{recipe.title}}</h5>
+                                <p class="card-text">{{recipe.description}}</p>
+                                <p>
+                                    <strong class=" pb-2">
+                                        <span class="text-primary">
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=0 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=2 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=3 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=4 ?'fas': 'far'"></i>
+                                            <i class=" fa-star" [ngClass]="recipe.qualification>=5?'fas': 'far'"></i>
+                                        </span>
+                                    </strong>
+                                </p>
+                                <a class="btn btn-primary" [routerLink]="['/detail', recipe.id]"
+                                    routerLinkActive="router-link-active">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</main>
+<!-- Footerc cool mdbootstrap -->
+<!-- Footer -->
+
+<app-public-footer></app-public-footer>
+<!-- Footer -->

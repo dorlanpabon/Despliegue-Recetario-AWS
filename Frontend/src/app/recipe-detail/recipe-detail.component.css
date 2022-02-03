@@ -1,0 +1,4 @@
+.rating:not([data-readonly='true']) li {
+    cursor: pointer;
+  }
+  
